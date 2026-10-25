@@ -1,0 +1,18 @@
+
+# Ambiente virtual do Python
+.venv/
+
+# Cache e arquivos temporários do Python
+__pycache__/
+*.py[cod]
+
+# Configurações locais do editor
+.vscode/
+
+# Arquivos de ambiente e possíveis segredos
+.env
+.env.*
+
+# Banco de dados local
+instance/
+*.db

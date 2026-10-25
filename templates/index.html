@@ -1,12 +1,12 @@
 <!--organiza o conteúdo da página*/-->
 
 <!DOCTYPE html> 
-<html loang="pt-br">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MoodBloom | Diário de Humor</title>
-    <link rel="stylesheet" href="../static/css/style.css">
+   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     <header>
@@ -34,7 +34,6 @@
 <p id="mensagem-humor" aria-live="polite">
     Escolha como você está se sentindo.
 </p>
-  </div>
   </section>
 
   <section>
@@ -84,11 +83,9 @@
     <footer>
         <p>Feito com carinho 💜</p>
     </footer>
-    <script src="../static/js/script.js"></script>
+   <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html> 
-</main>
-
 
 
 <!-- html lang="pt-BR">	Indica que a página está em português do Brasil.

@@ -1,14 +1,13 @@
-# MoodBloom 🌸
-#Meu primeiro projeto em Python
 
-print("================================")
-print("Bem-vindo ao MoodBloom! 🌸")
-print("================================")   
+from flask import Flask, render_template
 
-nome_projeto = "MoodBloom"
-objetivo ="Registrar meu humor diariamente"
+app = Flask(__name__)
 
-print("Projeto: ", nome_projeto)
-print("Objetivo:", objetivo)
 
-print("Ambiente de desenvolvimento preparado!")
+@app.route("/")
+def inicio():
+    return render_template("index.html")
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
