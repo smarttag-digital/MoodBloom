@@ -1,0 +1,318 @@
+ /*estilos, cores e layout
+
+/* 1. Cores principais do MoodBloom */
+:root {
+    --lilas: #b9a0e8;
+    --lilas-escuro: #8063b5;
+    --rosa: #f7c9df;
+    --rosa-claro: #fff0f6;
+    --fundo: #fcf9ff;
+    --texto: #51465f;
+    --branco: #ffffff;
+}
+
+/* 2. Ajustes gerais da página */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 32px 20px;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: linear-gradient(135deg, #fcf9ff, #fff0f6);
+    color: var(--texto);
+    min-height: 100vh;
+    text-align: center;
+}
+
+/* 3. Cabeçalho */
+header {
+    margin: 20px auto 40px;
+}
+
+header h1 {
+    color: var(--lilas-escuro);
+    font-size: 2.8rem;
+    margin-bottom: 10px;
+}
+
+header p {
+    font-size: 1.05rem;
+    color: #82758f;
+}
+
+/* 4. Cartões de conteúdo */
+main {
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+section {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 28px;
+    margin-bottom: 24px;
+    border: 1px solid #f0e5fa;
+    border-radius: 24px;
+    box-shadow: 0 8px 25px rgba(128, 99, 181, 0.08);
+}
+
+section h2 {
+    color: var(--lilas-escuro);
+    font-size: 1.35rem;
+}
+
+section p {
+    color: #82758f;
+    line-height: 1.6;
+}
+
+/* 5. Botões */
+button {
+    font: inherit;
+    cursor: pointer;
+    border: 1px solid #e7d8f7;
+    border-radius: 16px;
+    background: var(--rosa-claro);
+    color: var(--texto);
+    padding: 12px 16px;
+    margin: 6px 3px;
+    transition: transform 0.2s, background 0.2s;
+}
+
+button:hover {
+    background: var(--rosa);
+    transform: translateY(-2px);
+}
+
+/* 6. Campo de anotação */
+label {
+    display: block;
+    margin: 20px 0 10px;
+    text-align: left;
+}
+
+textarea {
+    display: block;
+    width: 100%;
+    min-height: 110px;
+    padding: 14px;
+    border: 1px solid #e7d8f7;
+    border-radius: 14px;
+    background: #fffafd;
+    color: var(--texto);
+    font: inherit;
+    resize: vertical;
+}
+
+textarea:focus {
+    outline: 2px solid var(--lilas);
+    border-color: transparent;
+}
+
+/* 7. Rodapé */
+footer {
+    margin-top: 35px;
+    color: #9686a7;
+    font-size: 0.9rem;
+}
+
+/* 8. Adaptação para celulares */
+@media (max-width: 480px) {
+    body {
+        padding: 20px 12px;
+    }
+
+    header h1 {
+        font-size: 2.2rem;
+    }
+
+    section {
+        padding: 22px 16px;
+    }
+
+    button {
+        padding: 10px 12px;
+    }
+}
+#opcoes-humor {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+}
+
+button.humor-selecionado {
+    background: var(--lilas);
+    color: white;
+    border-color: var(--lilas-escuro);
+    box-shadow: 0 4px 12px rgba(128, 99, 181, 0.2);
+}
+
+#mensagem-humor {
+    margin-top: 20px;
+    color: var(--lilas-escuro);
+    font-weight: 600;
+}
+
+#lista-registros article {
+    text-align: left;
+    background: #fff8fc;
+    border: 1px solid #f0e5fa;
+    border-radius: 16px;
+    padding: 16px;
+    margin-top: 14px;
+}
+
+#lista-registros article h3 {
+    color: var(--lilas-escuro);
+    margin: 0 0 8px;
+}
+
+#lista-registros article p {
+    overflow-wrap: anywhere;
+}
+
+#mensagem-registro {
+    color: var(--lilas-escuro);
+    font-weight: 600;
+    margin-top: 16px;
+}
+
+
+#resumo-humores {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: 12px;
+    margin: 24px 0;
+}
+
+.resumo-humor {
+    padding: 14px 8px;
+    border-radius: 16px;
+    background: #fff4fa;
+}
+
+.resumo-humor strong {
+    display: block;
+    font-size: 1.5rem;
+    color: var(--lilas-escuro);
+    margin-top: 6px;
+}
+
+#grafico-humores {
+    display: flex;
+    align-items: end;
+    justify-content: space-around;
+    gap: 12px;
+    min-height: 230px;
+    padding: 20px 8px 0;
+    border-bottom: 1px solid #eadcf5;
+}
+
+.coluna-grafico {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: end;
+    height: 210px;
+    gap: 8px;
+}
+
+.barra-grafico {
+    width: min(100%, 48px);
+    min-height: 4px;
+    border-radius: 12px 12px 4px 4px;
+    transition: height 0.3s ease;
+}
+
+.rotulo-grafico {
+    font-size: 0.75rem;
+    overflow-wrap: anywhere;
+}
+
+.valor-grafico {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--lilas-escuro);
+}
+
+.grafico-vazio {
+    margin: auto;
+    color: #82758f;
+    align-self: center;
+}
+
+.seletor-mes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.seletor-mes label {
+    margin: 0;
+}
+
+.seletor-mes input {
+    font: inherit;
+    color: var(--texto);
+    padding: 10px;
+    border: 1px solid #e7d8f7;
+    border-radius: 12px;
+    background: #fffafd;
+}
+
+.seletor-mes button {
+    margin: 0;
+}
+
+/* Histórico de registros do MoodBloom */
+
+.cartao-registro {
+    background: linear-gradient(135deg, #fff8fc, #f5efff);
+    border: 1px solid #eadcf8;
+    border-radius: 18px;
+    padding: 18px;
+    margin-bottom: 14px;
+    box-shadow: 0 4px 12px rgba(150, 115, 180, 0.10);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cartao-registro:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 18px rgba(150, 115, 180, 0.18);
+}
+
+.titulo-registro {
+    color: #8055a5;
+    font-size: 1.15rem;
+    margin: 0 0 10px;
+}
+
+.data-registro {
+    color: #987da9;
+    font-size: 0.85rem;
+    margin-bottom: 12px;
+}
+
+.anotacao-registro {
+    color: #55465f;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+    margin-bottom: 0;
+}
+
+.historico-vazio {
+    background: #fbf6ff;
+    border: 1px dashed #d9c4ef;
+    border-radius: 16px;
+    padding: 20px;
+    color: #8055a5;
+    text-align: center;
+}

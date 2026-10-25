@@ -1,0 +1,106 @@
+<!--organiza o conteúdo da página*/-->
+
+<!DOCTYPE html> 
+<html loang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoodBloom | Diário de Humor</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+</head>
+<body>
+    <header>
+        <h1> 🌸 MoodBloom</h1>
+        <p>Um espaço para acolher cada fase sua.</p>
+    </header>
+
+<main>
+  <section>
+  <h2>Como você está se sentindo hoje?</h2>
+  <p> Escolha o humor que mais combina com seu dia. </p>
+
+  <div id="opcoes-humor">
+    <button type="button" data-humor="Feliz">😊 Feliz</button>
+    <button type="button" data-humor="Triste">😢 Triste</button>
+    <button type="button" data-humor="Irritado">😡 Irritado</button>
+    <button type="button" data-humor="Assustado">😱 Assustado</button>
+    <button type="button" data-humor="Ótimo">😊 Ótimo</button>
+    <button type="button" data-humor="Bem">🙂 Bem</button>
+    <button type="button" data-humor="Normal">😐 Normal</button>
+    <button type="button" data-humor="Mal">😔 Mal</button>
+    <button type="button" data-humor="Péssimo">😢 Péssimo</button>
+</div>
+
+<p id="mensagem-humor" aria-live="polite">
+    Escolha como você está se sentindo.
+</p>
+  </div>
+  </section>
+
+  <section>
+     <h2>Quer registrar alguma coisa?</h2>
+            <label for="anotacao">Sua anotação (opcional)</label>
+            <textarea
+                id="anotacao"
+                placeholder="Escreva como foi seu dia..."
+                rows="4"
+ ></textarea>
+
+            <button type="button" id="registrar-dia">
+    Registrar meu dia
+</button>
+
+<p id="mensagem-registro" aria-live="polite"></p>
+        </section>
+        
+<section id="resumo-mensal">
+    <h2>🌷 Seu mês</h2>
+    
+<div class="seletor-mes">
+    <label for="mes-consulta">Consultar mês:</label>
+    <input type="month" id="mes-consulta">
+    <button type="button" id="mes-atual">Voltar para este mês</button>
+</div>
+
+    <p>Veja como seus humores apareceram nos registros.</p>
+
+    <div id="resumo-humores"></div>
+
+    <div
+        id="grafico-humores"
+        role="img"
+        aria-label="Gráfico com a quantidade de registros de cada humor"
+    ></div>
+</section>
+
+        <section>
+    <h2>🌷 Seus registros</h2>
+    <div id="lista-registros">
+        <p>Seus registros aparecerão aqui.</p>
+    </div>
+</section>
+    </main>
+
+    <footer>
+        <p>Feito com carinho 💜</p>
+    </footer>
+    <script src="../static/js/script.js"></script>
+</body>
+</html> 
+</main>
+
+
+
+<!-- html lang="pt-BR">	Indica que a página está em português do Brasil.
+<head>	Guarda informações sobre a página.
+<title>	Define o título exibido na aba do navegador.
+<body>	Contém o conteúdo visível.
+<h1>	Define o título principal.
+<p>	Cria um parágrafo.
+<button>	Cria um botão.
+<textarea>	Cria um campo de texto para anotações.
+<footer>	Define o rodapé.
+resumo-humores será o espaço para os totais.
+grafico-humores será o espaço para as barras coloridas.
+id permite que o JavaScript encontre esses elementos.-->
+
