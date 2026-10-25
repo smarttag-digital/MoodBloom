@@ -36,3 +36,6 @@ O MoodBloom faz parte da minha jornada de aprendizado em tecnologia e desenvolvi
 Letícia | Tech, IA & SmartTag
 
 Projeto pessoal desenvolvido para fins de aprendizado.
+
+# MoodBloom
+Um diário de humor digital desenvolvido com HTML, CSS e JavaScript.
