@@ -1,8 +1,6 @@
-/*interações e comportamentos*/
-
 
 /* =================================
-   1. ELEMENTOS DA PAGINA
+   1. ELEMENTOS DA PÁGINA
 ================================= */
 
 const botoesHumor = document.querySelectorAll("[data-humor]");
@@ -17,13 +15,13 @@ const graficoHumores = document.querySelector("#grafico-humores");
 const seletorMes = document.querySelector("#mes-consulta");
 const botaoMesAtual = document.querySelector("#mes-atual");
 
-const CHAVE_REGISTROS = "moodBloomRegistros";
-
 let humorSelecionado = null;
+let registros = [];
+let salvandoRegistro = false;
 
 
 /* =================================
-   2. CONFIGURACAO DOS HUMORES
+   2. CONFIGURAÇÃO DOS HUMORES
 ================================= */
 
 const humoresDoGrafico = [
@@ -40,41 +38,32 @@ const humoresDoGrafico = [
 
 
 /* =================================
-   3. CARREGAR REGISTROS SALVOS
+   3. BUSCAR REGISTROS NO SQLITE
 ================================= */
 
-function carregarRegistros() {
-    const dadosSalvos = localStorage.getItem(CHAVE_REGISTROS);
+async function carregarRegistros() {
+    const resposta = await fetch("/api/registros");
 
-    if (dadosSalvos === null) {
-        return [];
+    if (!resposta.ok) {
+        throw new Error("Não foi possível carregar os registros.");
     }
 
-    try {
-        const registros = JSON.parse(dadosSalvos);
-        return Array.isArray(registros) ? registros : [];
-    } catch {
-        return [];
-    }
+    registros = await resposta.json();
+    mostrarRegistros();
 }
 
 
 /* =================================
-   4. MOSTRAR OS REGISTROS
+   4. MOSTRAR O HISTÓRICO
 ================================= */
 
-
 function mostrarRegistros() {
-    const registros = carregarRegistros();
-
     listaRegistros.replaceChildren();
 
     if (registros.length === 0) {
         const aviso = document.createElement("p");
-
         aviso.className = "historico-vazio";
         aviso.textContent = "Seu primeiro registro começa hoje. 💜";
-
         listaRegistros.appendChild(aviso);
     } else {
         registros.slice().reverse().forEach(function (registro) {
@@ -87,14 +76,13 @@ function mostrarRegistros() {
                 return item.nome === registro.humor;
             });
 
-            const emoji = humor ? humor.emoji : "🌸";
-
             cartao.className = "cartao-registro";
             titulo.className = "titulo-registro";
             data.className = "data-registro";
             anotacao.className = "anotacao-registro";
 
-            titulo.textContent = emoji + " " + registro.humor;
+            titulo.textContent =
+                (humor ? humor.emoji : "🌸") + " " + registro.humor;
 
             const dataRegistro = new Date(registro.data);
 
@@ -106,9 +94,8 @@ function mostrarRegistros() {
                 minute: "2-digit"
             });
 
-            anotacao.textContent = registro.anotacao
-                ? registro.anotacao
-                : "Nenhuma anotação por aqui. 🌷";
+            anotacao.textContent = registro.anotacao ||
+                "Nenhuma anotação por aqui. 🌷";
 
             cartao.append(titulo, data, anotacao);
             listaRegistros.appendChild(cartao);
@@ -117,7 +104,6 @@ function mostrarRegistros() {
 
     mostrarResumoMensal();
 }
-
 
 
 /* =================================
@@ -142,10 +128,12 @@ botoesHumor.forEach(function (botao) {
 
 
 /* =================================
-   6. SALVAR UM REGISTRO
+   6. SALVAR NO BANCO DE DADOS
 ================================= */
 
-botaoRegistrar.addEventListener("click", function () {
+botaoRegistrar.addEventListener("click", async function () {
+    if (salvandoRegistro) return;
+
     if (!humorSelecionado) {
         mensagemRegistro.textContent =
             "Escolha um humor antes de registrar. 🌷";
@@ -158,29 +146,51 @@ botaoRegistrar.addEventListener("click", function () {
         data: new Date().toISOString()
     };
 
-    const registros = carregarRegistros();
-    registros.push(novoRegistro);
+    salvandoRegistro = true;
+    botaoRegistrar.disabled = true;
+    mensagemRegistro.textContent = "Salvando seu registro... 💜";
 
     try {
-        localStorage.setItem(
-            CHAVE_REGISTROS,
-            JSON.stringify(registros)
-        );
+        const resposta = await fetch("/api/registros", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(novoRegistro)
+        });
+
+        const resultado = await resposta.json();
+
+        if (!resposta.ok) {
+            throw new Error(resultado.erro || "Não foi possível salvar.");
+        }
 
         campoAnotacao.value = "";
         mensagemRegistro.textContent =
             "Seu dia foi registrado com carinho! 💜";
 
-        mostrarRegistros();
-    } catch {
+        botoesHumor.forEach(function (botao) {
+            botao.classList.remove("humor-selecionado");
+        });
+
+        humorSelecionado = null;
+        mensagemHumor.textContent =
+            "Escolha como você está se sentindo.";
+
+        await carregarRegistros();
+    } catch (erro) {
         mensagemRegistro.textContent =
-            "Não foi possível salvar. Verifique o armazenamento do navegador.";
+            "Não foi possível salvar. Verifique sua conexão com o servidor.";
+        console.error("Erro ao salvar registro:", erro);
+    } finally {
+        salvandoRegistro = false;
+        botaoRegistrar.disabled = false;
     }
 });
 
 
 /* =================================
-   7. ESCOLHER O MES
+   7. SELECIONAR O MÊS
 ================================= */
 
 function obterMesAtual() {
@@ -193,9 +203,7 @@ function obterMesAtual() {
 
 seletorMes.value = obterMesAtual();
 
-seletorMes.addEventListener("change", function () {
-    mostrarResumoMensal();
-});
+seletorMes.addEventListener("change", mostrarResumoMensal);
 
 botaoMesAtual.addEventListener("click", function () {
     seletorMes.value = obterMesAtual();
@@ -204,7 +212,7 @@ botaoMesAtual.addEventListener("click", function () {
 
 
 /* =================================
-   8. RESUMO E GRAFICO MENSAL
+   8. RESUMO E GRÁFICO MENSAL
 ================================= */
 
 function mostrarResumoMensal() {
@@ -212,7 +220,7 @@ function mostrarResumoMensal() {
     const [anoEscolhido, mesEscolhidoNumero] =
         mesEscolhido.split("-").map(Number);
 
-    const registrosDoMes = carregarRegistros().filter(function (registro) {
+    const registrosDoMes = registros.filter(function (registro) {
         const dataRegistro = new Date(registro.data);
 
         return (
@@ -275,13 +283,11 @@ function mostrarResumoMensal() {
         rotulo.className = "rotulo-grafico";
 
         valor.textContent = humor.quantidade;
-
         barra.style.height =
             (humor.quantidade / maiorTotal * 150) + "px";
 
         barra.style.backgroundColor = humor.cor;
         barra.setAttribute("aria-hidden", "true");
-
         rotulo.textContent = humor.emoji + " " + humor.nome;
 
         coluna.append(valor, barra, rotulo);
@@ -291,15 +297,11 @@ function mostrarResumoMensal() {
 
 
 /* =================================
-   9. INICIALIZAR A PAGINA
+   9. INICIALIZAR A PÁGINA
 ================================= */
 
-mostrarRegistros();
-
-
-
-/*qerySelectorAll -Encontra todos os botões com a etiqueta de humor
-addEventListener("click", ...)	- Executa uma ação quando alguém clica.
-classList.add() -	Adiciona uma classe visual ao botão escolhido.
-dataset.humor	- Lê o humor definido no HTML.
-textContent	- Atualiza a mensagem que aparece na página. */
+carregarRegistros().catch(function (erro) {
+    console.error("Erro ao carregar registros:", erro);
+    listaRegistros.textContent =
+        "Não foi possível carregar os registros. Verifique se o servidor está funcionando.";
+});
