@@ -1,5 +1,6 @@
 
 from flask import Flask, render_template, request, jsonify
+from datetime import datetime
 from database import conectar, criar_tabela
 
 app = Flask(__name__)
@@ -61,9 +62,17 @@ def salvar_registro():
 
     if len(anotacao) > 5000:
         return jsonify({"erro": "A anotação deve ter até 5000 caracteres."}), 400
-
+    
     if not isinstance(data, str) or not data.strip():
         return jsonify({"erro": "A data do registro é obrigatória."}), 400
+
+    try:
+        data_validada = datetime.fromisoformat(data.replace("Z", "+00:00"))
+    except ValueError:
+        return jsonify({"erro": "Envie uma data válida."}), 400
+
+    if data_validada.tzinfo is None:
+        return jsonify({"erro": "A data precisa incluir o fuso horário."}), 400
 
     with conectar() as conexao:
         cursor = conexao.execute(
